@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ValVal — Tu Tienda Online, Dos Caminos | Propuesta de Desarrollo</title>
+  <meta name="description" content="Propuesta personalizada para ValVal: elige entre desarrollo completo o modelo SaaS por comisiones para tu tienda de ropa online.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="#" class="logo">VAL<span>VAL</span></a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#planes">Planes</a></li>
+          <li><a href="#timeline">Tiempos</a></li>
+          <li><a href="#comparativa">Comparativa</a></li>
+          <li><a href="#faq">Preguntas</a></li>
+        </ul>
+      </nav>
+      <a href="#contacto" class="header-cta">Hablar con nosotros</a>
+      <button class="mobile-toggle" id="mobile-toggle" aria-label="Menú">☰</button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge reveal">
+          <span class="pulse"></span>
+          Propuesta Exclusiva para ValVal
+        </div>
+        <h1 class="hero-title reveal reveal-delay-1">
+          Tu tienda online,<br>
+          <span class="highlight">dos caminos.</span>
+        </h1>
+        <p class="hero-subtitle reveal reveal-delay-2">
+          Creamos la tienda web perfecta para tu marca de ropa. Tú eliges cómo quieres avanzar: 
+          adquirir tu producto digital completo o arrancar sin inversión inicial con nuestro modelo por comisiones.
+        </p>
+        <div class="hero-actions reveal reveal-delay-3">
+          <a href="#planes" class="btn-primary">Ver los planes</a>
+          <a href="#comparativa" class="btn-secondary">Comparar opciones</a>
+        </div>
+      </div>
+      <div class="hero-visual reveal reveal-delay-2">
+        <div class="hero-image-wrapper">
+          <img src="hero_ecommerce.png" alt="Mockup de tienda e-commerce premium para marca de ropa" width="540" height="540">
+        </div>
+        <div class="hero-float-card card-1">
+          <div class="float-card-label">Ventas en línea</div>
+          <div class="float-card-value">+340%</div>
+        </div>
+        <div class="hero-float-card card-2">
+          <div class="float-card-label">Tiempo de entrega</div>
+          <div class="float-card-value gold">6-8 sem.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PLANES ===== -->
+  <section class="plans" id="planes">
+    <div class="container">
+      <div class="plans-header reveal">
+        <span class="section-tag"><span class="dot"></span>Nuestros planes</span>
+        <h2 class="section-title">Elige el modelo que mejor<br>se adapte a tu negocio</h2>
+        <p class="section-subtitle" style="margin-inline: auto;">
+          Cada camino tiene sus ventajas. Ambos te llevan al mismo destino: 
+          una tienda online profesional que represente a ValVal.
+        </p>
+      </div>
+
+      <div class="plans-grid">
+
+        <!-- PLAN 1: Desarrollo Completo -->
+        <div class="plan-card desarrollo reveal">
+          <div class="plan-card-inner">
+            <div class="plan-icon">🏗️</div>
+            <span class="plan-badge">Producto Completo</span>
+            <h3 class="plan-name">Desarrollo Completo</h3>
+            <p class="plan-tagline">Tu tienda, tu propiedad. Pago único por un producto digital a tu medida.</p>
+            
+            <div class="plan-price">
+              <span class="amount">$2M – $3M MXN</span>
+              <span class="period">pago único</span>
+            </div>
+
+            <p class="plan-description">
+              Diseñamos y desarrollamos tu tienda web completa desde cero. Una vez entregada, 
+              es <strong>100% tuya</strong>: código, diseño, dominio, hosting — todo. 
+              Tú tienes el control total sin depender de terceros.
+            </p>
+
+            <ul class="plan-features">
+              <li>
+                <span class="check">✓</span>
+                <span>Diseño UI/UX personalizado acorde a la identidad de ValVal</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Catálogo de productos con gestión de inventario</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Pasarela de pagos integrada (Stripe, MercadoPago, etc.)</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Panel de administración para gestionar pedidos y clientes</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Código fuente entregado — la tienda es 100% tuya</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>SEO optimizado y responsive en todos los dispositivos</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>3 meses de soporte técnico incluidos post-lanzamiento</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Sin comisiones ni pagos recurrentes — 0% sobre tus ventas</span>
+              </li>
+            </ul>
+
+            <a href="#contacto" class="plan-cta">Elegir Desarrollo Completo</a>
+          </div>
+        </div>
+
+        <!-- PLAN 2: Modelo SaaS -->
+        <div class="plan-card saas reveal reveal-delay-1">
+          <div class="plan-card-inner">
+            <div class="plan-icon">🚀</div>
+            <span class="plan-badge">Sin inversión inicial</span>
+            <h3 class="plan-name">Modelo SaaS</h3>
+            <p class="plan-tagline">Arranca sin pagar nada al inicio. Nosotros ganamos cuando tú ganas.</p>
+            
+            <div class="plan-price">
+              <span class="amount">$0 inicial</span>
+              <span class="period">+ comisión por venta</span>
+            </div>
+
+            <p class="plan-description">
+              Construimos tu tienda sin costo inicial. A cambio, cobramos una comisión sobre cada venta 
+              que generes. <strong>Tu riesgo es cero</strong>: solo pagas cuando vendes. Nosotros nos 
+              encargamos de la infraestructura, actualizaciones y soporte continuo.
+            </p>
+
+            <ul class="plan-features">
+              <li>
+                <span class="check">✓</span>
+                <span>Sin inversión inicial — arranca desde $0</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Comisión del 5-8% por cada venta realizada</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Diseño profesional adaptado a tu marca</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Hosting, dominio y SSL incluidos — nosotros lo gestionamos</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Actualizaciones automáticas y mantenimiento continuo</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Soporte técnico permanente mientras dure el acuerdo</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Reportes de ventas y analytics en tiempo real</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Posibilidad de migrar a modelo propio cuando quieras</span>
+              </li>
+            </ul>
+
+            <a href="#contacto" class="plan-cta">Elegir Modelo SaaS</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TIMELINE ===== -->
+  <section class="timeline-section" id="timeline">
+    <div class="container">
+      <div class="timeline-header reveal">
+        <span class="section-tag"><span class="dot"></span>Estimación de tiempos</span>
+        <h2 class="section-title">¿Cuánto tiempo toma<br>cada camino?</h2>
+        <p class="section-subtitle" style="margin-inline: auto;">
+          Cada modelo tiene un proceso diferente. Aquí te mostramos el roadmap de cada opción.
+        </p>
+      </div>
+
+      <div class="timeline-tabs reveal">
+        <button class="timeline-tab active" data-target="timeline-desarrollo">🏗️ Desarrollo Completo</button>
+        <button class="timeline-tab" data-target="timeline-saas">🚀 Modelo SaaS</button>
+      </div>
+
+      <!-- Timeline Desarrollo -->
+      <div class="timeline-container active" id="timeline-desarrollo">
+        <div class="timeline gold reveal">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-duration">Semana 1–2</div>
+            <div class="timeline-phase">Descubrimiento y Estrategia</div>
+            <div class="timeline-desc">
+              Entendemos tu marca, tus productos, tu público y tus objetivos de negocio. 
+              Definimos la arquitectura de la tienda, flujos de compra y estructura de contenido.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-duration">Semana 2–4</div>
+            <div class="timeline-phase">Diseño UI/UX</div>
+            <div class="timeline-desc">
+              Creamos wireframes y el diseño visual completo alineado a la identidad de ValVal. 
+              Incluye hasta 3 rondas de revisiones para que quede perfecto.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-duration">Semana 4–7</div>
+            <div class="timeline-phase">Desarrollo Frontend & Backend</div>
+            <div class="timeline-desc">
+              Maquetamos el diseño aprobado con código limpio y optimizado. Integramos catálogo de productos, 
+              carrito de compras, pasarela de pagos y panel de administración.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-duration">Semana 7–8</div>
+            <div class="timeline-phase">Testing y Lanzamiento</div>
+            <div class="timeline-desc">
+              Pruebas exhaustivas en todos los dispositivos. Optimización de rendimiento, 
+              SEO, configuración de dominio y puesta en producción. ¡Tu tienda sale al aire!
+            </div>
+          </div>
+        </div>
+        <div class="timeline-total gold reveal">
+          <div class="label">Tiempo total estimado</div>
+          <div class="value">6 – 8 semanas</div>
+        </div>
+      </div>
+
+      <!-- Timeline SaaS -->
+      <div class="timeline-container" id="timeline-saas">
+        <div class="timeline emerald reveal">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-duration">Semana 1</div>
+            <div class="timeline-phase">Onboarding Express</div>
+            <div class="timeline-desc">
+              Reunión inicial para conocer tu marca y productos. Recopilamos fotos, logos, 
+              textos y paleta de colores. Configuramos tu cuenta en nuestra plataforma.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-duration">Semana 2–3</div>
+            <div class="timeline-phase">Diseño y Personalización</div>
+            <div class="timeline-desc">
+              Adaptamos una plantilla premium a tu marca. Personalizamos colores, tipografía, 
+              layout y cargamos tus productos al catálogo.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-duration">Semana 3–4</div>
+            <div class="timeline-phase">Configuración e Integraciones</div>
+            <div class="timeline-desc">
+              Configuramos pagos, envíos, impuestos y notificaciones. Conectamos analytics 
+              y herramientas de marketing. Todo listo para vender.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-duration">Semana 4</div>
+            <div class="timeline-phase">Lanzamiento</div>
+            <div class="timeline-desc">
+              Publicamos tu tienda, verificamos todo el flujo de compra y te capacitamos 
+              para que puedas gestionar tu catálogo y pedidos de forma autónoma.
+            </div>
+          </div>
+        </div>
+        <div class="timeline-total emerald reveal">
+          <div class="label">Tiempo total estimado</div>
+          <div class="value">3 – 4 semanas</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMPARATIVA ===== -->
+  <section class="comparison" id="comparativa">
+    <div class="container">
+      <div class="comparison-header reveal">
+        <span class="section-tag"><span class="dot"></span>Comparativa</span>
+        <h2 class="section-title">Cara a cara</h2>
+        <p class="section-subtitle" style="margin-inline: auto;">
+          Una vista rápida de lo que incluye cada modelo para que puedas decidir con claridad.
+        </p>
+      </div>
+
+      <div class="comparison-table-wrapper reveal">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Característica</th>
+              <th>🏗️ Desarrollo Completo</th>
+              <th>🚀 Modelo SaaS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Inversión inicial</td>
+              <td>$2M – $3M MXN</td>
+              <td><span class="icon-yes">✓</span> $0</td>
+            </tr>
+            <tr>
+              <td>Comisiones por venta</td>
+              <td><span class="icon-yes">✓</span> 0%</td>
+              <td>5% – 8%</td>
+            </tr>
+            <tr>
+              <td>Propiedad del código</td>
+              <td><span class="icon-yes">✓</span> 100% tuyo</td>
+              <td><span class="icon-no">✕</span> Licenciado</td>
+            </tr>
+            <tr>
+              <td>Diseño personalizado</td>
+              <td><span class="icon-yes">✓</span> 100% custom</td>
+              <td><span class="icon-yes">✓</span> Plantilla adaptada</td>
+            </tr>
+            <tr>
+              <td>Tiempo de entrega</td>
+              <td>6 – 8 semanas</td>
+              <td>3 – 4 semanas</td>
+            </tr>
+            <tr>
+              <td>Hosting incluido</td>
+              <td><span class="icon-no">✕</span> Por tu cuenta</td>
+              <td><span class="icon-yes">✓</span> Incluido</td>
+            </tr>
+            <tr>
+              <td>Mantenimiento y actualizaciones</td>
+              <td>3 meses incluidos, luego opcional</td>
+              <td><span class="icon-yes">✓</span> Permanente</td>
+            </tr>
+            <tr>
+              <td>Soporte técnico</td>
+              <td>3 meses incluidos</td>
+              <td><span class="icon-yes">✓</span> Permanente</td>
+            </tr>
+            <tr>
+              <td>Analytics y reportes</td>
+              <td><span class="icon-yes">✓</span> Básico</td>
+              <td><span class="icon-yes">✓</span> Dashboard completo</td>
+            </tr>
+            <tr>
+              <td>Escalabilidad</td>
+              <td>Tú lo gestionas</td>
+              <td><span class="icon-yes">✓</span> Nosotros escalamos contigo</td>
+            </tr>
+            <tr>
+              <td>Ideal para</td>
+              <td>Marcas consolidadas con capital disponible</td>
+              <td>Marcas que inician o prefieren bajo riesgo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="faq-header reveal">
+        <span class="section-tag"><span class="dot"></span>Preguntas frecuentes</span>
+        <h2 class="section-title">Resolvemos tus dudas</h2>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item reveal">
+          <button class="faq-question" id="faq-btn-1" aria-expanded="false" aria-controls="faq-answer-1">
+            <span>¿Qué incluye exactamente el desarrollo completo?</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-answer" id="faq-answer-1">
+            <div class="faq-answer-inner">
+              Recibes una tienda web completamente funcional con diseño personalizado, catálogo de productos, 
+              carrito de compras, pasarela de pagos, panel de administración, SEO optimizado y el código fuente completo. 
+              Es un producto terminado que puedes alojar donde quieras y modificar como necesites.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-1">
+          <button class="faq-question" id="faq-btn-2" aria-expanded="false" aria-controls="faq-answer-2">
+            <span>¿Cómo funciona la comisión en el modelo SaaS?</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-answer" id="faq-answer-2">
+            <div class="faq-answer-inner">
+              Cobramos entre el 5% y el 8% por cada venta que realices a través de la tienda. 
+              El porcentaje exacto depende del volumen estimado de ventas — a mayor volumen, menor comisión. 
+              Si no vendes, no pagas nada. Es así de simple.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-2">
+          <button class="faq-question" id="faq-btn-3" aria-expanded="false" aria-controls="faq-answer-3">
+            <span>¿Puedo migrar del modelo SaaS al desarrollo completo?</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-answer" id="faq-answer-3">
+            <div class="faq-answer-inner">
+              ¡Sí! Puedes comenzar con el modelo SaaS para validar tu negocio online y, cuando estés listo, 
+              migrar al desarrollo completo. Te ofrecemos condiciones preferenciales si decides hacer la transición, 
+              incluyendo un descuento por el tiempo que estuviste en el modelo SaaS.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-3">
+          <button class="faq-question" id="faq-btn-4" aria-expanded="false" aria-controls="faq-answer-4">
+            <span>¿Qué pasa si necesito cambios después del lanzamiento?</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-answer" id="faq-answer-4">
+            <div class="faq-answer-inner">
+              En el desarrollo completo, tienes 3 meses de soporte incluido. Después puedes contratar un plan 
+              de mantenimiento mensual o hacer los cambios por tu cuenta con tu equipo. En el modelo SaaS, 
+              el soporte y las actualizaciones son permanentes mientras dure el acuerdo.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-4">
+          <button class="faq-question" id="faq-btn-5" aria-expanded="false" aria-controls="faq-answer-5">
+            <span>¿Qué métodos de pago pueden usar mis clientes?</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-answer" id="faq-answer-5">
+            <div class="faq-answer-inner">
+              En ambos modelos integramos las principales pasarelas de pago: tarjeta de crédito/débito, 
+              MercadoPago, transferencias bancarias y más. Nos adaptamos a lo que mejor funcione para tu 
+              mercado y tus clientes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA FINAL ===== -->
+  <section class="cta-section" id="contacto">
+    <div class="container">
+      <div class="cta-card reveal">
+        <span class="section-tag"><span class="dot"></span>¿Listo para empezar?</span>
+        <h2 class="section-title">Llevemos a ValVal<br>al siguiente nivel</h2>
+        <p class="section-subtitle">
+          Agenda una llamada sin compromiso. Te explicamos todo a detalle 
+          y te ayudamos a elegir el camino ideal para tu marca.
+        </p>
+        <a href="https://wa.me/521XXXXXXXXXX" target="_blank" rel="noopener" class="btn-primary">
+          Agendar llamada →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <span class="footer-text">Realizado por <span class="footer-brand">Ing. David Díaz</span></span>
+      <span class="footer-text">Socializado por <span class="footer-brand">Ing. Juan Leyton</span></span>
+    </div>
+  </footer>
+
+  <script src="index.js"></script>
+</body>
+</html>
