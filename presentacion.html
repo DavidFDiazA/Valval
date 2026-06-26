@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta ValVal — Modelos de Negocio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ===== TOKENS ===== */
+    :root {
+      --bg: #06060e;
+      --bg-card: rgba(14, 14, 24, 0.75);
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.08);
+      --text: #f0ece4;
+      --text-secondary: #9a9a9a;
+      --text-muted: #5a5a6a;
+      --gold: #c9a84c;
+      --gold-light: #e0c87a;
+      --emerald: #2dd4a8;
+      --emerald-light: #5eeec8;
+      --violet: #8b5cf6;
+      --rose: #f43f5e;
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== PRESENTATION SHELL ===== */
+    .presentation {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    /* ===== SLIDES ===== */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      opacity: 0;
+      transform: translateX(80px) scale(0.96);
+      pointer-events: none;
+      transition: opacity var(--transition), transform var(--transition);
+      z-index: 1;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    .slide.prev {
+      opacity: 0;
+      transform: translateX(-80px) scale(0.96);
+    }
+
+    .slide-inner {
+      width: 100%;
+      max-width: 1100px;
+      position: relative;
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--emerald));
+      transition: width 0.5s ease;
+      z-index: 100;
+    }
+
+    /* ===== NAV CONTROLS ===== */
+    .nav-controls {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: rgba(14, 14, 24, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      z-index: 100;
+    }
+
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+    }
+
+    .nav-btn:hover {
+      background: rgba(201, 168, 76, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    .nav-btn:disabled:hover {
+      background: var(--glass);
+      border-color: var(--glass-border);
+      color: var(--text);
+    }
+
+    .slide-counter {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .slide-counter .current {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ===== DOT INDICATORS ===== */
+    .dot-indicators {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot-ind {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--glass-border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+    }
+
+    .dot-ind.active {
+      background: var(--gold);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    /* ===== SLIDE TYPES ===== */
+
+    /* -- Cover Slide -- */
+    .slide-cover {
+      background-image: url('img/cover_bg.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .slide-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(6,6,14,0.85) 0%, rgba(6,6,14,0.6) 100%);
+    }
+
+    .slide-cover .slide-inner {
+      z-index: 2;
+      text-align: center;
+    }
+
+    .cover-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border-radius: 999px;
+      background: rgba(201, 168, 76, 0.1);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      font-size: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      animation: fadeUp 0.8s ease both 0.2s;
+    }
+
+    .cover-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 20px;
+      animation: fadeUp 0.8s ease both 0.4s;
+    }
+
+    .cover-title .gold { color: var(--gold); }
+
+    .cover-subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+      animation: fadeUp 0.8s ease both 0.6s;
+    }
+
+    .cover-meta {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      animation: fadeUp 0.8s ease both 0.8s;
+    }
+
+    .cover-meta-item {
+      text-align: center;
+    }
+
+    .cover-meta-item .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .cover-meta-item .value {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* -- Section Title Slide -- */
+    .slide-section .slide-inner {
+      text-align: center;
+    }
+
+    .section-number {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0.2;
+      line-height: 1;
+      margin-bottom: -20px;
+    }
+
+    .section-slide-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .section-slide-sub {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 550px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* -- Content Slides -- */
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .content-side h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    .content-side .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+    }
+
+    .tag-gold {
+      background: rgba(201, 168, 76, 0.1);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      color: var(--gold);
+    }
+
+    .tag-emerald {
+      background: rgba(45, 212, 168, 0.1);
+      border: 1px solid rgba(45, 212, 168, 0.2);
+      color: var(--emerald);
+    }
+
+    .content-side p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .feature-list .icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .icon-gold {
+      background: rgba(201, 168, 76, 0.12);
+      color: var(--gold);
+    }
+
+    .icon-emerald {
+      background: rgba(45, 212, 168, 0.12);
+      color: var(--emerald);
+    }
+
+    .visual-side {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .visual-side img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+
+    /* Price highlight */
+    .price-highlight {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .price-highlight .amount {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+    }
+
+    .price-highlight .note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .amount-gold { color: var(--gold); }
+    .amount-emerald { color: var(--emerald); }
+
+    /* -- Comparison Slide -- */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .compare-card {
+      padding: 32px;
+      border-radius: var(--radius);
+      border: 1px solid var(--glass-border);
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .compare-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .compare-card.card-gold::before { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .compare-card.card-emerald::before { background: linear-gradient(90deg, var(--emerald), var(--emerald-light)); }
+
+    .compare-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .compare-card .subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .compare-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stat-item {
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+    }
+
+    .stat-item .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .stat-item .stat-value {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .stat-gold { color: var(--gold); }
+    .stat-emerald { color: var(--emerald); }
+
+    /* -- Timeline Slide -- */
+    .timeline-slide-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .timeline-col h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tl-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .tl-items::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      border-radius: 1px;
+    }
+
+    .tl-gold::before { background: rgba(201, 168, 76, 0.3); }
+    .tl-emerald::before { background: rgba(45, 212, 168, 0.3); }
+
+    .tl-item {
+      position: relative;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .tl-gold .tl-item::before { background: var(--gold); }
+    .tl-emerald .tl-item::before { background: var(--emerald); }
+
+    .tl-item .tl-time {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .tl-gold .tl-time { color: var(--gold); }
+    .tl-emerald .tl-time { color: var(--emerald); }
+
+    .tl-item .tl-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+
+    .tl-item .tl-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .tl-total {
+      margin-top: 20px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      text-align: center;
+    }
+
+    .tl-total .tl-total-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    .tl-total .tl-total-value {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .tl-total-gold .tl-total-value { color: var(--gold); }
+    .tl-total-emerald .tl-total-value { color: var(--emerald); }
+
+    /* -- CTA Slide -- */
+    .slide-cta .slide-inner {
+      text-align: center;
+    }
+
+    .cta-big-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .cta-big-title .gold { color: var(--gold); }
+
+    .cta-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .cta-btn {
+      padding: 16px 36px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s ease;
+      text-decoration: none;
+    }
+
+    .cta-btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: #0a0a0f;
+    }
+
+    .cta-btn-gold:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px rgba(201, 168, 76, 0.25);
+    }
+
+    .cta-btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+    }
+
+    .cta-btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .cta-credits {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .credit-item {
+      text-align: center;
+    }
+
+    .credit-item .credit-role {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .credit-item .credit-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    /* -- Slide centered title utility -- */
+    .slide-center-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .slide-center-title h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .slide-center-title p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    /* ===== KEYBOARD HINT ===== */
+    .keyboard-hint {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      z-index: 100;
+      opacity: 1;
+      transition: opacity 1s ease;
+    }
+
+    .keyboard-hint.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .keyboard-hint kbd {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      margin: 0 2px;
+    }
+
+    /* ===== Ambient glow per slide ===== */
+    .ambient-glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(120px);
+      opacity: 0.12;
+    }
+
+    .glow-gold {
+      background: var(--gold);
+    }
+
+    .glow-emerald {
+      background: var(--emerald);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .slide { padding: 30px 20px 100px; }
+      .split-layout { grid-template-columns: 1fr; gap: 30px; }
+      .visual-side { display: none; }
+      .comparison-grid { grid-template-columns: 1fr; }
+      .timeline-slide-grid { grid-template-columns: 1fr; }
+      .cover-meta { gap: 20px; flex-wrap: wrap; }
+      .cta-credits { flex-direction: column; gap: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide { transition: none; }
+      .cover-badge, .cover-title, .cover-subtitle, .cover-meta { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="presentation" id="presentation">
+
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- ====== SLIDE 1: COVER ====== -->
+  <div class="slide slide-cover active" data-slide="0">
+    <div class="slide-inner">
+      <div class="cover-badge">✦ Propuesta de Desarrollo</div>
+      <h1 class="cover-title">
+        Tu producto digital,<br>
+        <span class="gold">dos caminos.</span>
+      </h1>
+      <p class="cover-subtitle">
+        Dos modelos de negocio para desarrollar tu producto digital.
+        Tú eliges el que mejor se adapte a tu momento y a tu visión.
+      </p>
+      <div class="cover-meta">
+        <div class="cover-meta-item">
+          <div class="label">Cliente</div>
+          <div class="value">ValVal</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="label">Tipo</div>
+          <div class="value">Desarrollo de Producto Digital</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="label">Fecha</div>
+          <div class="value">Junio 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 2: CONTEXT ====== -->
+  <div class="slide slide-section" data-slide="1">
+    <div class="ambient-glow glow-gold" style="top:-10%;right:-10%;"></div>
+    <div class="slide-inner">
+      <div class="section-number">01</div>
+      <h2 class="section-slide-title">La Oportunidad</h2>
+      <p class="section-slide-sub">
+        La transformación digital ya no es opcional. Ya sea una tienda online, una plataforma web, 
+        una app o un sistema interno — nosotros <strong style="color:var(--gold)">lo construimos para ti</strong>. 
+        Y te damos dos caminos para hacerlo realidad.
+      </p>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 3: MODELO 1 — DESARROLLO COMPLETO ====== -->
+  <div class="slide" data-slide="2">
+    <div class="ambient-glow glow-gold" style="bottom:-15%;left:-10%;"></div>
+    <div class="slide-inner">
+      <div class="split-layout">
+        <div class="content-side">
+          <div class="tag tag-gold">🏗️ Modelo A</div>
+          <h2>Desarrollo<br>Completo</h2>
+          <p>
+            Diseñamos y desarrollamos tu producto digital desde cero, totalmente a medida.
+            Una vez entregado, es <strong>100% tuyo</strong> — código, diseño, datos, todo.
+            Pagas una vez y es de tu propiedad.
+          </p>
+          <div class="price-highlight">
+            <span class="amount amount-gold">$2M – $5M COP</span>
+            <span class="note">pago único</span>
+          </div>
+          <ul class="feature-list">
+            <li><span class="icon icon-gold">✓</span> Diseño y desarrollo 100% a la medida</li>
+            <li><span class="icon icon-gold">✓</span> Web, app, e-commerce o plataforma — lo que necesites</li>
+            <li><span class="icon icon-gold">✓</span> Panel de administración propio</li>
+            <li><span class="icon icon-gold">✓</span> Código fuente entregado</li>
+            <li><span class="icon icon-gold">✓</span> 0% comisiones — tus ganancias son tuyas</li>
+          </ul>
+        </div>
+        <div class="visual-side">
+          <img src="img/dev_concept.png" alt="Concepto de desarrollo completo" width="480" height="480">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 4: ANALOGÍA DEV ====== -->
+  <div class="slide slide-section" data-slide="3">
+    <div class="ambient-glow glow-gold" style="top:20%;left:50%;transform:translateX(-50%);"></div>
+    <div class="slide-inner">
+      <div class="section-number">🏠</div>
+      <h2 class="section-slide-title">Es como comprar tu casa</h2>
+      <p class="section-slide-sub">
+        Pagas una inversión inicial fuerte, pero después es <strong style="color:var(--gold)">100% tuya</strong>. 
+        No pagas renta, no dependes de nadie. Tú decides qué hacer con ella, 
+        cuándo remodelarla, y todas las ganancias son tuyas.
+      </p>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 5: MODELO 2 — SAAS ====== -->
+  <div class="slide" data-slide="4">
+    <div class="ambient-glow glow-emerald" style="bottom:-15%;right:-10%;"></div>
+    <div class="slide-inner">
+      <div class="split-layout">
+        <div class="content-side">
+          <div class="tag tag-emerald">🚀 Modelo B</div>
+          <h2>Modelo SaaS<br>por Comisiones</h2>
+          <p>
+            Nosotros construimos tu producto digital <strong>sin costo inicial</strong>. A cambio, 
+            cobramos una comisión por cada venta o transacción que generes. Tu riesgo es cero: 
+            solo pagas cuando produces resultados.
+          </p>
+          <div class="price-highlight">
+            <span class="amount amount-emerald">$0 inicial</span>
+            <span class="note">+ 5-8% por transacción</span>
+          </div>
+          <ul class="feature-list">
+            <li><span class="icon icon-emerald">✓</span> Sin inversión inicial — arranca desde $0</li>
+            <li><span class="icon icon-emerald">✓</span> Hosting, dominio e infraestructura incluidos</li>
+            <li><span class="icon icon-emerald">✓</span> Actualizaciones y soporte permanentes</li>
+            <li><span class="icon icon-emerald">✓</span> Dashboard de métricas en tiempo real</li>
+            <li><span class="icon icon-emerald">✓</span> Migración a modelo propio cuando quieras</li>
+          </ul>
+        </div>
+        <div class="visual-side">
+          <img src="img/saas_concept.png" alt="Concepto de modelo SaaS" width="480" height="480">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 6: ANALOGÍA SAAS ====== -->
+  <div class="slide slide-section" data-slide="5">
+    <div class="ambient-glow glow-emerald" style="top:20%;left:50%;transform:translateX(-50%);"></div>
+    <div class="slide-inner">
+      <div class="section-number">🏨</div>
+      <h2 class="section-slide-title">Es como rentar un local equipado</h2>
+      <p class="section-slide-sub">
+        No necesitas capital inicial. Empiezas a operar desde el día uno y 
+        <strong style="color:var(--emerald)">solo pagas un porcentaje de lo que generas</strong>. 
+        Nosotros nos encargamos del mantenimiento, la seguridad y las mejoras continuas.
+      </p>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 7: COMPARISON ====== -->
+  <div class="slide" data-slide="6">
+    <div class="slide-inner">
+      <div class="slide-center-title">
+        <h2>Comparativa Directa</h2>
+        <p>Los números lado a lado para que decidas con claridad</p>
+      </div>
+      <div class="comparison-grid">
+        <div class="compare-card card-gold">
+          <h3>🏗️ Desarrollo Completo</h3>
+          <div class="subtitle">Tu producto, tu propiedad</div>
+          <div class="compare-stats">
+            <div class="stat-item">
+              <div class="stat-label">Inversión</div>
+              <div class="stat-value stat-gold">$2-5M COP</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Comisiones</div>
+              <div class="stat-value stat-gold">0%</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Propiedad</div>
+              <div class="stat-value stat-gold">100% Tuya</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Soporte</div>
+              <div class="stat-value">3 meses</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Diseño</div>
+              <div class="stat-value">100% Custom</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Ideal para</div>
+              <div class="stat-value" style="font-size:0.8rem">Negocio con capital disponible</div>
+            </div>
+          </div>
+        </div>
+        <div class="compare-card card-emerald">
+          <h3>🚀 Modelo SaaS</h3>
+          <div class="subtitle">Arranca sin riesgo</div>
+          <div class="compare-stats">
+            <div class="stat-item">
+              <div class="stat-label">Inversión</div>
+              <div class="stat-value stat-emerald">$0</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Comisiones</div>
+              <div class="stat-value stat-emerald">5-8%</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Propiedad</div>
+              <div class="stat-value">Licenciado</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Soporte</div>
+              <div class="stat-value stat-emerald">Permanente</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Diseño</div>
+              <div class="stat-value">Plantilla adaptada</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Ideal para</div>
+              <div class="stat-value" style="font-size:0.8rem">Negocio que quiere bajo riesgo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 8: TIMELINE ====== -->
+  <div class="slide" data-slide="7">
+    <div class="slide-inner">
+      <div class="slide-center-title">
+        <h2>Estimación de Tiempos</h2>
+        <p>Cada camino tiene su propio ritmo</p>
+      </div>
+      <div class="timeline-slide-grid">
+        <!-- Dev timeline -->
+        <div class="timeline-col">
+          <h3><span style="color:var(--gold)">🏗️</span> Desarrollo Completo</h3>
+          <div class="tl-items tl-gold">
+            <div class="tl-item">
+              <div class="tl-time">Sem 1-2</div>
+              <div class="tl-name">Descubrimiento</div>
+              <div class="tl-desc">Estrategia, arquitectura y definición</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">Sem 2-4</div>
+              <div class="tl-name">Diseño UI/UX</div>
+              <div class="tl-desc">Wireframes, diseño visual y revisiones</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">Sem 4-7</div>
+              <div class="tl-name">Desarrollo</div>
+              <div class="tl-desc">Frontend, backend, integraciones</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">Sem 7-8</div>
+              <div class="tl-name">Testing & Launch</div>
+              <div class="tl-desc">QA, optimización y puesta en producción</div>
+            </div>
+          </div>
+          <div class="tl-total tl-total-gold">
+            <div class="tl-total-label">Total estimado</div>
+            <div class="tl-total-value">6 – 8 semanas</div>
+          </div>
+        </div>
+        <!-- SaaS timeline -->
+        <div class="timeline-col">
+          <h3><span style="color:var(--emerald)">🚀</span> Modelo SaaS</h3>
+          <div class="tl-items tl-emerald">
+            <div class="tl-item">
+              <div class="tl-time">Sem 1</div>
+              <div class="tl-name">Onboarding Express</div>
+              <div class="tl-desc">Recopilación de requisitos y contenidos</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">Sem 2-3</div>
+              <div class="tl-name">Personalización</div>
+              <div class="tl-desc">Diseño adaptado y configuración inicial</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">Sem 3-4</div>
+              <div class="tl-name">Configuración</div>
+              <div class="tl-desc">Pagos, envíos, analytics</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">Sem 4</div>
+              <div class="tl-name">Lanzamiento</div>
+              <div class="tl-desc">Publicación y capacitación</div>
+            </div>
+          </div>
+          <div class="tl-total tl-total-emerald">
+            <div class="tl-total-label">Total estimado</div>
+            <div class="tl-total-value">3 – 4 semanas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 9: CTA ====== -->
+  <div class="slide slide-cta" data-slide="8">
+    <div class="ambient-glow glow-gold" style="top:10%;left:30%;"></div>
+    <div class="ambient-glow glow-emerald" style="bottom:10%;right:30%;"></div>
+    <div class="slide-inner">
+      <h2 class="cta-big-title">
+        ¿Listo para llevar a<br><span class="gold">ValVal</span> al siguiente nivel?
+      </h2>
+      <p class="cta-subtitle">
+        Elige el camino que más se adapte a tu momento actual. 
+        Estamos listos para empezar cuando tú lo estés.
+      </p>
+      <div class="cta-buttons">
+        <a href="#" class="cta-btn cta-btn-gold">Agendar reunión →</a>
+        <a href="index.html" class="cta-btn cta-btn-outline">Ver propuesta detallada</a>
+      </div>
+      <div class="cta-credits">
+        <div class="credit-item">
+          <div class="credit-role">Realizado por</div>
+          <div class="credit-name">Ing. David Díaz</div>
+        </div>
+        <div class="credit-item">
+          <div class="credit-role">Socializado por</div>
+          <div class="credit-name">Ing. Juan Leyton</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAV CONTROLS -->
+<div class="nav-controls">
+  <button class="nav-btn" id="prevBtn" aria-label="Anterior">←</button>
+  <div class="dot-indicators" id="dotIndicators"></div>
+  <span class="slide-counter"><span class="current" id="currentSlide">1</span> / <span id="totalSlides">9</span></span>
+  <button class="nav-btn" id="nextBtn" aria-label="Siguiente">→</button>
+</div>
+
+<div class="keyboard-hint" id="keyboardHint">
+  Usa <kbd>←</kbd> <kbd>→</kbd> o <kbd>Space</kbd> para navegar
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  const progressBar = document.getElementById('progressBar');
+  const currentSlideEl = document.getElementById('currentSlide');
+  const totalSlidesEl = document.getElementById('totalSlides');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dotContainer = document.getElementById('dotIndicators');
+  const keyboardHint = document.getElementById('keyboardHint');
+
+  let current = 0;
+
+  // Build dots
+  totalSlidesEl.textContent = totalSlides;
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.classList.add('dot-ind');
+    if (i === 0) dot.classList.add('active');
+    dot.setAttribute('aria-label', `Ir a diapositiva ${i + 1}`);
+    dot.addEventListener('click', () => goToSlide(i));
+    dotContainer.appendChild(dot);
+  }
+
+  function goToSlide(index) {
+    if (index < 0 || index >= totalSlides || index === current) return;
+
+    const direction = index > current ? 'next' : 'prev';
+
+    slides[current].classList.remove('active');
+    slides[current].classList.add(direction === 'next' ? 'prev' : '');
+
+    current = index;
+
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if (i < current) s.classList.add('prev');
+    });
+    slides[current].classList.add('active');
+
+    updateUI();
+  }
+
+  function updateUI() {
+    // Progress
+    const progress = ((current + 1) / totalSlides) * 100;
+    progressBar.style.width = progress + '%';
+
+    // Counter
+    currentSlideEl.textContent = current + 1;
+
+    // Dots
+    const dots = dotContainer.querySelectorAll('.dot-ind');
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+
+    // Buttons
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === totalSlides - 1;
+
+    // Hide hint after first nav
+    if (current > 0) keyboardHint.classList.add('hidden');
+  }
+
+  prevBtn.addEventListener('click', () => goToSlide(current - 1));
+  nextBtn.addEventListener('click', () => goToSlide(current + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      goToSlide(current + 1);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goToSlide(current - 1);
+    }
+  });
+
+  // Touch swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? goToSlide(current + 1) : goToSlide(current - 1);
+    }
+  }, { passive: true });
+
+  updateUI();
+</script>
+</body>
+</html>
